@@ -1,0 +1,284 @@
+<!--
+/*
+ * Copyright (c) 2020, Red Hat, Inc.
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * This file is part of the Red Hat GraalVM Testing Suite (the suite).
+ *
+ * The suite is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ * Foobar is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Foobar.  If not, see <https://www.gnu.org/licenses/>.
+ */
+-->
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>com.redhat.jfr</groupId>
+  <artifactId>graalvm-tests</artifactId>
+  <packaging>jar</packaging>
+  <version>1.0-SNAPSHOT</version>
+  <name>graalvm-tests</name>
+  <url>http://maven.apache.org</url>
+
+  <profiles>
+    <!-- Define the build section -->
+    <profile>
+      <id>jfrtestserver</id>
+      <build>
+        <plugins>
+
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-compiler-plugin</artifactId>
+            <version>3.8.1</version> <!-- Use latest version -->
+            <configuration>
+              <source>21</source> <!-- Set Java version for source code -->
+              <target>21</target> <!-- Set Java version for target compilation -->
+            </configuration>
+          </plugin>
+
+          <plugin>
+            <groupId>org.graalvm.buildtools</groupId>
+            <artifactId>native-maven-plugin</artifactId>
+            <version>0.10.5</version>
+            <extensions>true</extensions>
+            <executions>
+              <execution>
+                <id>build-native</id>
+                <goals>
+                  <goal>compile-no-fork</goal>
+                </goals>
+                <phase>package</phase>
+              </execution>
+            </executions>
+            <configuration>
+              <mainClass>main.java.com.redhat.jfr.JfrTestServer</mainClass>
+              <buildArgs>
+                <buildArg>--enable-monitoring=jfr,jmxserver</buildArg>
+              </buildArgs>
+              <imageName>jfrtestserver</imageName>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+
+    <profile>
+      <id>standardmbeanserver</id>
+      <build>
+        <plugins>
+
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-compiler-plugin</artifactId>
+            <version>3.8.1</version> <!-- Use latest version -->
+            <configuration>
+              <source>21</source> <!-- Set Java version for source code -->
+              <target>21</target> <!-- Set Java version for target compilation -->
+            </configuration>
+          </plugin>
+
+          <plugin>
+            <groupId>org.graalvm.buildtools</groupId>
+            <artifactId>native-maven-plugin</artifactId>
+            <version>0.10.5</version>
+            <extensions>true</extensions>
+            <executions>
+              <execution>
+                <id>build-native</id>
+                <goals>
+                  <goal>compile-no-fork</goal>
+                </goals>
+                <phase>package</phase>
+              </execution>
+            </executions>
+            <configuration>
+              <mainClass>main.java.com.redhat.jfr.StandardMBeanServer</mainClass>
+              <buildArgs>
+                <buildArg>--enable-monitoring=jfr,jmxserver</buildArg>
+<!--                <buildArg>-H:DynamicProxyConfigurationFiles=/home/rtoyonag/IdeaProjects/RJMXTests/src/main/java/com/redhat/jfr/reachability-metadata.json</buildArg>-->
+              </buildArgs>
+              <imageName>standardmbeanserver</imageName>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+
+    <profile>
+      <id>jfrtestclient</id>
+      <build>
+        <plugins>
+
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-compiler-plugin</artifactId>
+            <version>3.8.1</version> <!-- Use latest version -->
+            <configuration>
+              <source>21</source> <!-- Set Java version for source code -->
+              <target>21</target> <!-- Set Java version for target compilation -->
+            </configuration>
+          </plugin>
+
+          <plugin>
+            <groupId>org.graalvm.buildtools</groupId>
+            <artifactId>native-maven-plugin</artifactId>
+            <version>0.10.5</version>
+            <extensions>true</extensions>
+            <executions>
+              <execution>
+                <id>build-native</id>
+                <goals>
+                  <goal>compile-no-fork</goal>
+                </goals>
+                <phase>package</phase>
+              </execution>
+            </executions>
+            <configuration>
+              <mainClass>main.java.com.redhat.jfr.JfrTestClient</mainClass>
+              <buildArgs>
+                <buildArg>--enable-monitoring=jfr,jmxclient</buildArg>
+              </buildArgs>
+              <imageName>jfrtestclient</imageName>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+
+    <profile>
+      <id>standardmbeanclient</id>
+      <build>
+        <plugins>
+
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-compiler-plugin</artifactId>
+            <version>3.8.1</version> <!-- Use latest version -->
+            <configuration>
+              <source>21</source> <!-- Set Java version for source code -->
+              <target>21</target> <!-- Set Java version for target compilation -->
+            </configuration>
+          </plugin>
+
+          <plugin>
+            <groupId>org.graalvm.buildtools</groupId>
+            <artifactId>native-maven-plugin</artifactId>
+            <version>0.10.5</version>
+            <extensions>true</extensions>
+            <executions>
+              <execution>
+                <id>build-native</id>
+                <goals>
+                  <goal>compile-no-fork</goal>
+                </goals>
+                <phase>package</phase>
+              </execution>
+            </executions>
+            <configuration>
+              <mainClass>main.java.com.redhat.jfr.StandardMBeanClient</mainClass>
+              <buildArgs>
+                <buildArg>--enable-monitoring=jfr,jmxclient</buildArg>
+              </buildArgs>
+              <imageName>standardmbeanclient</imageName>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+
+    <profile>
+      <id>jfrtestinvokeclient</id>
+      <build>
+        <plugins>
+
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-compiler-plugin</artifactId>
+            <version>3.8.1</version> <!-- Use latest version -->
+            <configuration>
+              <source>21</source> <!-- Set Java version for source code -->
+              <target>21</target> <!-- Set Java version for target compilation -->
+            </configuration>
+          </plugin>
+
+          <plugin>
+            <groupId>org.graalvm.buildtools</groupId>
+            <artifactId>native-maven-plugin</artifactId>
+            <version>0.10.5</version>
+            <extensions>true</extensions>
+            <executions>
+              <execution>
+                <id>build-native</id>
+                <goals>
+                  <goal>compile-no-fork</goal>
+                </goals>
+                <phase>package</phase>
+              </execution>
+            </executions>
+            <configuration>
+              <mainClass>main.java.com.redhat.jfr.JfrTestInvokeClient</mainClass>
+              <buildArgs>
+                <buildArg>--enable-monitoring=jfr,jmxclient</buildArg>
+              </buildArgs>
+              <imageName>jfrtestinvokeclient</imageName>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+
+    <profile>
+      <id>platformbeantestclient</id>
+      <build>
+        <plugins>
+
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-compiler-plugin</artifactId>
+            <version>3.8.1</version> <!-- Use latest version -->
+            <configuration>
+              <source>21</source> <!-- Set Java version for source code -->
+              <target>21</target> <!-- Set Java version for target compilation -->
+            </configuration>
+          </plugin>
+
+          <plugin>
+            <groupId>org.graalvm.buildtools</groupId>
+            <artifactId>native-maven-plugin</artifactId>
+            <version>0.10.5</version>
+            <extensions>true</extensions>
+            <executions>
+              <execution>
+                <id>build-native</id>
+                <goals>
+                  <goal>compile-no-fork</goal>
+                </goals>
+                <phase>package</phase>
+              </execution>
+            </executions>
+            <configuration>
+              <mainClass>main.java.com.redhat.jfr.PlatformBeanTestClient</mainClass>
+              <buildArgs>
+                <buildArg>--enable-monitoring=jfr,jmxclient</buildArg>
+              </buildArgs>
+              <imageName>platformbeantestclient</imageName>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+
+  </profiles>
+</project>
